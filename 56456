@@ -1,0 +1,28 @@
+import telebot
+
+TOKEN = '8404557207:AAE7vl9ldJewGMmoKIWJGbCnPLSoJreoXrQ'
+bot = telebot.TeleBot(TOKEN)
+
+from bs4 import BeautifulSoup
+import requests
+
+link = "https://www.sportedu.by/raspisanie-zanyatij/"
+
+response = requests.get(link)
+
+html = response.text  # получаем содержимое страницы
+soup = BeautifulSoup(html, "lxml")  # создаем объект BeautifulSoup
+
+рез = soup.find("tr", style="font-size: 10pt;").find_all("a")
+
+image_url = рез[2].get('href')
+
+@bot.message_handler(commands=['start'])
+def main(message):
+    bot.send_message(message.chat.id, image_url)
+
+@bot.message_handler(commands=['пж'])
+def main(message):
+    bot.send_message(message.chat.id, image_url)
+
+bot.polling()
