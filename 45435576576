@@ -1,0 +1,23 @@
+html = response.text
+soup = BeautifulSoup(html, "lxml")
+
+row = soup.find("tr", style="font-size: 10pt;")
+if row:
+    рез = row.find_all("a")
+    if len(рез) > 2:
+        image_url = рез[2].get('href', '')
+    else:
+        image_url = "Расписание не найдено"
+else:
+    image_url = "Расписание не найдено"
+
+@bot.message_handler(commands=['start'])
+def start_handler(message):
+    bot.send_message(message.chat.id, str(image_url))
+
+@bot.message_handler(commands=['пж'])
+def pj_handler(message):
+    bot.send_message(message.chat.id, str(image_url))
+
+print("Bot is starting...")
+bot.polling()
